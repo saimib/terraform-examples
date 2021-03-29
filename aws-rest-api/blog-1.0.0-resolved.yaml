@@ -11,22 +11,28 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/saimib/Blog/1.0.0
-  description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/saimib/Blog/1.0.0
+    description: SwaggerHub API Auto Mocking
 tags:
-- name: posts
-  description: Blog posts
-- name: comments
-  description: Comments made on a blog post
+  - name: posts
+    description: Blog posts
+  - name: comments
+    description: Comments made on a blog post
 paths:
   /posts:
     get:
       tags:
-      - posts
+        - posts
       summary: return all the blog posts
       description: |
         Return all the blog posts in the system
       operationId: returnPosts
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_get_blog_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "200":
           description: array of all posts in the system
@@ -35,12 +41,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/Post"
         "404":
           description: not found
     post:
       tags:
-      - posts
+        - posts
       summary: add a blog post
       description: Adds a blog post to the system
       operationId: addPost
@@ -49,7 +55,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Post'
+              $ref: "#/components/schemas/Post"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_post_blog_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "201":
           description: item created
@@ -58,7 +70,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/Post"
         "400":
           description: invalid input, object invalid
         "409":
@@ -66,21 +78,27 @@ paths:
   /posts/{id}:
     get:
       tags:
-      - posts
+        - posts
       summary: get a blog post
       description: Return the post matching the ID
       operationId: getPost
       parameters:
-      - name: id
-        in: path
-        description: post ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: uuid
-        example: d290f1ee-6c54-4b01-90e6-d701748f0859
+        - name: id
+          in: path
+          description: post ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0859
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_get_blog_byid_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "200":
           description: return post by id
@@ -89,32 +107,38 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/Post"
         "404":
           description: not found
     put:
       tags:
-      - posts
+        - posts
       summary: replace a blog post
       description: Adds an item to the system
       operationId: replacePost
       parameters:
-      - name: id
-        in: path
-        description: post ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: uuid
-        example: d290f1ee-6c54-4b01-90e6-d701748f0859
+        - name: id
+          in: path
+          description: post ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0859
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_put_blog_byid_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       requestBody:
         description: Inventory item to add
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Post'
+              $ref: "#/components/schemas/Post"
       responses:
         "201":
           description: item created
@@ -123,28 +147,34 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/Post"
         "400":
           description: invalid input, object invalid
         "409":
           description: an existing item already exists
     delete:
       tags:
-      - posts
+        - posts
       summary: delete a blog post
       description: Deletes a blog post in the system
       operationId: deletePost
       parameters:
-      - name: id
-        in: path
-        description: post ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: uuid
-        example: d290f1ee-6c54-4b01-90e6-d701748f0859
+        - name: id
+          in: path
+          description: post ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0859
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_delete_blog_byid_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "200":
           description: item deleted
@@ -152,21 +182,27 @@ paths:
           description: not found
     patch:
       tags:
-      - posts
+        - posts
       summary: modify a blog post
       description: Modifies a blog post in the system
       operationId: modifyPost
       parameters:
-      - name: id
-        in: path
-        description: post ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: uuid
-        example: d290f1ee-6c54-4b01-90e6-d701748f0859
+        - name: id
+          in: path
+          description: post ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0859
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_patch_blog_byid_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "201":
           description: item modified
@@ -175,7 +211,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/Post"
         "400":
           description: invalid input, object invalid
         "404":
@@ -183,22 +219,28 @@ paths:
   /posts/{id}/comments:
     get:
       tags:
-      - comments
+        - comments
       summary: return all the comments in a post
       description: |
         Return all the blog posts in the system
       operationId: returnComments
       parameters:
-      - name: id
-        in: path
-        description: post ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: uuid
-        example: d290f1ee-6c54-4b01-90e6-d701748f0859
+        - name: id
+          in: path
+          description: post ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0859
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_get_comment_arn}/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_identity_timeout}
+        type: "aws_proxy"
       responses:
         "200":
           description: array of all comments in the post
@@ -207,19 +249,19 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Comment'
+                  $ref: "#/components/schemas/Comment"
         "404":
           description: not found
 components:
   schemas:
     Post:
       required:
-      - author
-      - comments
-      - content
-      - date
-      - id
-      - title
+        - author
+        - comments
+        - content
+        - date
+        - id
+        - title
       type: object
       properties:
         id:
@@ -239,13 +281,13 @@ components:
         comments:
           type: array
           items:
-            $ref: '#/components/schemas/Comment'
+            $ref: "#/components/schemas/Comment"
     Comment:
       required:
-      - author
-      - content
-      - date
-      - id
+        - author
+        - content
+        - date
+        - id
       type: object
       properties:
         id:
