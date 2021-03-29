@@ -4,6 +4,11 @@
     For more, check https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#terraform-block 
 */
 terraform {
+  backend "s3" {
+    bucket = "tf-example-backend"
+    key    = "terraform/example"
+    region = "eu-west-2"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws" // Shorthand for registry.terraform.io/hashicorp/aws, more providers can be found in https://registry.terraform.io/browse/providers
