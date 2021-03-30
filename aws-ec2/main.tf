@@ -1,7 +1,8 @@
 /*  
     Terraform block 
     This is required to know which provider to download from Terraform Registry
-    For more, check https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#terraform-block 
+    For more, check 
+    https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#terraform-block 
 */
 terraform {
   backend "s3" {
@@ -11,8 +12,12 @@ terraform {
   }
   required_providers {
     aws = {
-      source  = "hashicorp/aws" // Shorthand for registry.terraform.io/hashicorp/aws, more providers can be found in https://registry.terraform.io/browse/providers
-      version = "~> 3.27"       // Version is optional but recommended to avoid breaking changes
+      /* 
+        Shorthand for registry.terraform.io/hashicorp/aws, 
+        more providers can be found in https://registry.terraform.io/browse/providers
+      */
+      source  = "hashicorp/aws"
+      version = "~> 3.27" // Version is optional but recommended to avoid breaking changes
     }
   }
 }
@@ -20,7 +25,8 @@ terraform {
 
 /*  
     Provider block 
-    This configures the named provider, in our case aws. Multiple provider blocks can exist to manage resources from different providers.
+    This configures the named provider, in our case aws. 
+    Multiple provider blocks can exist to manage resources from different providers.
     For more, check https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#providers
 */
 provider "aws" {
