@@ -1,19 +1,25 @@
 /*  
     Terraform block 
     This is required to know which provider to download from Terraform Registry
-    For more, check https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#terraform-block 
+    For more, check 
+    https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#terraform-block 
 */
 terraform {
   required_providers {
     docker = {
-      source = "kreuzwerker/docker" // Shorthand for registry.terraform.io/kreuzwerker/docker, more providers can be found in https://registry.terraform.io/browse/providers
+      /*
+        Shorthand for registry.terraform.io/kreuzwerker/docker, 
+        more providers can be found in https://registry.terraform.io/browse/providers
+      */
+      source = "kreuzwerker/docker"
     }
   }
 }
 
 /*  
     Provider block 
-    This configures the named provider, in our case aws. Multiple provider blocks can exist to manage resources from different providers.
+    This configures the named provider, in our case aws. 
+    Multiple provider blocks can exist to manage resources from different providers.
     For more, check https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started#providers
 */
 provider "docker" {
